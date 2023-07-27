@@ -1,0 +1,148 @@
+ * Serving Flask app 'app'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5000
+Press CTRL+C to quit
+127.0.0.1 - - [13/May/2023 18:30:26] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [13/May/2023 18:30:26] "GET /template/index.css HTTP/1.1" 200 -
+127.0.0.1 - - [13/May/2023 18:30:26] "GET /template/add_file.png HTTP/1.1" 200 -
+127.0.0.1 - - [13/May/2023 18:30:26] "GET /template/init.js HTTP/1.1" 200 -
+127.0.0.1 - - [13/May/2023 18:30:26] "GET /template/ModifyCss.js HTTP/1.1" 200 -
+127.0.0.1 - - [13/May/2023 18:30:26] "GET /template/ClickBtn.js HTTP/1.1" 200 -
+127.0.0.1 - - [13/May/2023 18:30:26] "GET /template/DragFile.js HTTP/1.1" 200 -
+127.0.0.1 - - [13/May/2023 18:30:26] "GET /template/upload.js HTTP/1.1" 200 -
+127.0.0.1 - - [13/May/2023 18:30:26] "GET /template/JsToPy.js HTTP/1.1" 200 -
+127.0.0.1 - - [13/May/2023 18:30:26] "GET /setting/getPath HTTP/1.1" 200 -
+127.0.0.1 - - [13/May/2023 18:30:26] "GET /favicon.ico HTTP/1.1" 404 -
+D:\university\project\excel_util\ExcelUtil\dist
+out_path
+union_excel
+ * Serving Flask app 'app'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5000
+Press CTRL+C to quit
+127.0.0.1 - - [14/May/2023 18:39:14] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [14/May/2023 18:39:14] "GET /template/index.css HTTP/1.1" 200 -
+127.0.0.1 - - [14/May/2023 18:39:14] "GET /template/add_file.png HTTP/1.1" 200 -
+127.0.0.1 - - [14/May/2023 18:39:14] "GET /template/init.js HTTP/1.1" 200 -
+127.0.0.1 - - [14/May/2023 18:39:14] "GET /template/upload.js HTTP/1.1" 200 -
+127.0.0.1 - - [14/May/2023 18:39:14] "GET /template/ModifyCss.js HTTP/1.1" 200 -
+127.0.0.1 - - [14/May/2023 18:39:14] "GET /template/ClickBtn.js HTTP/1.1" 200 -
+127.0.0.1 - - [14/May/2023 18:39:14] "GET /template/JsToPy.js HTTP/1.1" 200 -
+127.0.0.1 - - [14/May/2023 18:39:14] "GET /template/DragFile.js HTTP/1.1" 200 -
+127.0.0.1 - - [14/May/2023 18:39:14] "GET /setting/getPath HTTP/1.1" 200 -
+127.0.0.1 - - [14/May/2023 18:39:14] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [14/May/2023 18:39:27] "GET /setting/paths?path1=D:\\university\\project\\excel_util\\output\\&path2=D:\\university\\project\\excel_util\\excel\\待匹配_test.xlsx HTTP/1.1" 200 -
+127.0.0.1 - - [14/May/2023 18:39:36] "POST /upload?type=0 HTTP/1.1" 200 -
+127.0.0.1 - - [14/May/2023 18:39:38] "POST /upload?type=1 HTTP/1.1" 200 -
+openpyxl\styles\stylesheet.py:226: UserWarning: Workbook contains no default style, apply openpyxl's default
+127.0.0.1 - - [14/May/2023 18:39:45] "GET /combine?union=D:\\university\\project\\excel_util\\excel\\待匹配_test.xlsx HTTP/1.1" 200 -
+D:\university\project\excel_util\ExcelUtil\dist
+out_path
+union_excel
+D:\university\project\excel_util\output\ D:\university\project\excel_util\excel\待匹配_test.xlsx
+file_type:  0
+delete the old file...
+upload new file...
+file_type:  1
+delete the old file...
+upload new file...
+5月
+[['3月', 1, 14067863, '2023-03-07', '*电线电缆*电线电缆', '3*2.5', 13, 384.955385, '扎', 5004.42, 5655, '5月', 2, '14067863', '2023-03-07', '献县华桥线缆有限公司', '*电线电缆*电线电缆', '3*2.5', 13.0, 384.955385, '扎', 5004.42, 5655.0], ['3月', 1, 14067863, '2023-03-07', '*电线电缆*电线电缆', '3*4+1*2.5', 2, 734.515, '扎', 1469.03, 1660, '5月', 3, '14067863', '2023-03-07', '献县华桥线缆有限公司', '*电线电缆*电线电缆', '3*4+1*2.5', 2.0, 734.515, '扎', 1469.03, 1660.0], ['5月', 3, 23782444.0, '2023-03-01', '*黑色金属冶炼压延品*止水钢板', 'L型', 30.0, 86.725667, '个', 2601.77, 2940.0, '3月', 1.0, 23782444.0, '2023-03-01', '献县华桥线缆有限公司', '*黑色金属冶炼压延品*止水钢板', 'L型', 30.0, 86.725667, '个', 2601.77, 2940.0], ['5月', 4, 23782444.0, '2023-03-01', '*黑色金属冶炼压延品*止水钢板', '300*30mm', 50.0, 30.575233, '米', 9172.57, 10365.0, '3月', 1.0, 23782444.0, '2023-03-01', '献县华桥线缆有限公司', '*黑色金属冶炼压延品*止水钢板', 'L型', 50.0, 86.725667, '个', 2601.77, 2940.0]]
+[['进销比对区', '进销比对区', '进销比对区', '进销比对区'], ['进项含税单价', '销项含税单价', '进项含税总金额', '销项含税金额'], [435.0, 435.0, 5655.0, 5655], [830.0, 830.0, 1660.0, 1660], [98.0, 98.0, 2940.0, 2940.0], [58.8, 207.3, 2940.0, 10365.0]]
+ * Serving Flask app 'app'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5000
+Press CTRL+C to quit
+127.0.0.1 - - [18/Jul/2023 11:30:05] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [18/Jul/2023 11:30:05] "GET /template/index.css HTTP/1.1" 200 -
+127.0.0.1 - - [18/Jul/2023 11:30:05] "GET /template/add_file.png HTTP/1.1" 200 -
+127.0.0.1 - - [18/Jul/2023 11:30:05] "GET /template/init.js HTTP/1.1" 200 -
+127.0.0.1 - - [18/Jul/2023 11:30:05] "GET /template/upload.js HTTP/1.1" 200 -
+127.0.0.1 - - [18/Jul/2023 11:30:05] "GET /template/ModifyCss.js HTTP/1.1" 200 -
+127.0.0.1 - - [18/Jul/2023 11:30:05] "GET /template/JsToPy.js HTTP/1.1" 200 -
+127.0.0.1 - - [18/Jul/2023 11:30:05] "GET /template/DragFile.js HTTP/1.1" 200 -
+127.0.0.1 - - [18/Jul/2023 11:30:05] "GET /template/ClickBtn.js HTTP/1.1" 200 -
+127.0.0.1 - - [18/Jul/2023 11:30:05] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [18/Jul/2023 11:30:05] "GET /setting/getPath HTTP/1.1" 200 -
+D:\university\project\Excel文件合并\ExcelUtil\dist
+out_path
+union_excel
+ * Serving Flask app 'app'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5000
+Press CTRL+C to quit
+127.0.0.1 - - [18/Jul/2023 11:40:12] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [18/Jul/2023 11:40:12] "GET /template/index.css HTTP/1.1" 200 -
+127.0.0.1 - - [18/Jul/2023 11:40:12] "GET /template/add_file.png HTTP/1.1" 200 -
+127.0.0.1 - - [18/Jul/2023 11:40:12] "GET /template/init.js HTTP/1.1" 200 -
+127.0.0.1 - - [18/Jul/2023 11:40:12] "GET /template/upload.js HTTP/1.1" 200 -
+127.0.0.1 - - [18/Jul/2023 11:40:12] "GET /template/JsToPy.js HTTP/1.1" 200 -
+127.0.0.1 - - [18/Jul/2023 11:40:12] "GET /template/DragFile.js HTTP/1.1" 200 -
+127.0.0.1 - - [18/Jul/2023 11:40:12] "GET /template/ModifyCss.js HTTP/1.1" 200 -
+127.0.0.1 - - [18/Jul/2023 11:40:12] "GET /template/ClickBtn.js HTTP/1.1" 200 -
+127.0.0.1 - - [18/Jul/2023 11:40:12] "GET /setting/getPath HTTP/1.1" 200 -
+127.0.0.1 - - [18/Jul/2023 11:40:12] "GET /favicon.ico HTTP/1.1" 404 -
+D:\university\project\ExcelFileCombine\ExcelUtil\dist
+out_path
+union_excel
+ * Serving Flask app 'app'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5000
+Press CTRL+C to quit
+127.0.0.1 - - [19/Jul/2023 22:42:50] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2023 22:42:50] "GET /template/index.css HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2023 22:42:50] "GET /template/add_file.png HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2023 22:42:50] "GET /template/init.js HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2023 22:42:50] "GET /template/ModifyCss.js HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2023 22:42:50] "GET /template/upload.js HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2023 22:42:50] "GET /template/DragFile.js HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2023 22:42:50] "GET /template/JsToPy.js HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2023 22:42:50] "GET /template/ClickBtn.js HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2023 22:42:50] "GET /setting/getPath HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2023 22:42:50] "GET /favicon.ico HTTP/1.1" 404 -
+ * Serving Flask app 'app'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5000
+Press CTRL+C to quit
+127.0.0.1 - - [19/Jul/2023 22:42:53] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2023 22:42:53] "GET /template/index.css HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2023 22:42:53] "GET /template/add_file.png HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2023 22:42:53] "GET /template/init.js HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2023 22:42:53] "GET /template/upload.js HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2023 22:42:53] "GET /template/ModifyCss.js HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2023 22:42:53] "GET /template/JsToPy.js HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2023 22:42:53] "GET /template/DragFile.js HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2023 22:42:53] "GET /template/ClickBtn.js HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2023 22:42:53] "GET /setting/getPath HTTP/1.1" 200 -
+127.0.0.1 - - [19/Jul/2023 22:42:53] "GET /favicon.ico HTTP/1.1" 404 -
+D:\dev\ExcelUtil\dist
+out_path
+union_excel
+D:\dev\ExcelUtil\dist
+out_path
+union_excel
+ * Serving Flask app 'app'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5000
+Press CTRL+C to quit
+127.0.0.1 - - [27/Jul/2023 15:04:54] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [27/Jul/2023 15:04:54] "GET /template/index.css HTTP/1.1" 200 -
+127.0.0.1 - - [27/Jul/2023 15:04:54] "GET /template/add_file.png HTTP/1.1" 200 -
+127.0.0.1 - - [27/Jul/2023 15:04:54] "GET /template/init.js HTTP/1.1" 200 -
+127.0.0.1 - - [27/Jul/2023 15:04:54] "GET /template/upload.js HTTP/1.1" 200 -
+127.0.0.1 - - [27/Jul/2023 15:04:54] "GET /template/ModifyCss.js HTTP/1.1" 200 -
+127.0.0.1 - - [27/Jul/2023 15:04:54] "GET /template/JsToPy.js HTTP/1.1" 200 -
+127.0.0.1 - - [27/Jul/2023 15:04:54] "GET /template/DragFile.js HTTP/1.1" 200 -
+127.0.0.1 - - [27/Jul/2023 15:04:54] "GET /template/ClickBtn.js HTTP/1.1" 200 -
+127.0.0.1 - - [27/Jul/2023 15:04:54] "GET /setting/getPath HTTP/1.1" 200 -
+127.0.0.1 - - [27/Jul/2023 15:04:54] "GET /favicon.ico HTTP/1.1" 404 -
+D:\dev\ExcelUtil\dist
+out_path
+union_excel

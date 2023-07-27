@@ -1,0 +1,6 @@
+# 注意:
+# 1. 在路径最后必须要添加反斜杠 
+# 2. 不要破坏文件结构 (冒号后面有个空格，路径使用单引号) 
+# 3. 文件路径必须存在！
+out_path: 'D:\university\project\Excel文件合并\output\'
+union_excel: 'D:\university\project\Excel文件合并\excel\总（待）匹配表.xlsx'

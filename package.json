@@ -1,0 +1,16 @@
+{
+  "name": "excelutil",
+  "version": "1.0.0",
+  "description": "",
+  "main": "template/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@electron-forge/cli": "^6.1.0",
+    "electron": "^23.2.0"
+  }
+}
