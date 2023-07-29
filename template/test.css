@@ -1,0 +1,55 @@
+html,
+body {
+    height: 100%;
+}
+
+#drag-area {
+    position: flex;
+    height: 60%;
+    width: 100%;
+    background-color: blueviolet;
+    display: flex;
+    justify-content: space-between;
+}
+
+#drag-child1 {
+    width: 33%;
+    height: 100%;
+    background-color: aqua;
+}
+
+#drag-child2 {
+    width: 33%;
+    height: 100%;
+    background-color: chartreuse;
+}
+
+#drag-child3 {
+    width: 33%;
+    height: 100%;
+    background-color: coral;
+}
+
+
+.drag-excel {
+    position: relative;
+    border-radius: 20%;
+    background-color: red;
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.top-half,
+.bottom-half {
+    width: 100%;
+    height: 50%;
+}
+
+.top-half {
+    background-color: greenyellow;
+}
+
+.bottom-half {
+    background-color: darkred;
+}

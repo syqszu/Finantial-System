@@ -1,0 +1,137 @@
+html,
+body {
+    height: 100%;
+}
+
+#background {
+    background-image: url("./background.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+}
+
+@media screen and (max-width: 768px) {
+    #background {
+        background-size: contain;
+    }
+}
+
+#top-bar {
+    height: 10vh;
+    background-color: lightblue;
+    text-align: left;
+    line-height: 10vh;
+    display: flex;
+    align-items: center;
+}
+
+#logo {
+    height: 8vh;
+    margin-left: 10px;
+}
+
+#title {
+    margin-left: 20px;
+}
+
+#transparent-white {
+    position: relative;
+    /* position: absolute; */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(90% - 10vh);
+    background-color: white;
+    opacity: 0.5;
+}
+
+#input-area {
+    height: 80%;
+    width: 100%;
+    background-color: lightgreen;
+    display: flex;
+}
+
+#left-input-area {
+    position: relative;
+    width: 70%;
+    height: 100%;
+    background-color: brown;
+}
+
+#right-input-area {
+    position: relative;
+    width: 30%;
+    height: 100%;
+    background-color: black;
+}
+
+#instruction-area {
+    position: relative;
+    height: 40%;
+    width: 100%;
+    background-color: blue;
+}
+
+#instruction-title {
+    height: 10%;
+}
+
+#instruction-words {
+    height: 90%;
+}
+
+#drag-area {
+    position: flex;
+    height: 60%;
+    width: 100%;
+    background-color: blueviolet;
+    display: flex;
+    justify-content: space-between;
+}
+
+#drag-child1 {
+    width: 33%;
+    height: 100%;
+    background-color: aqua;
+}
+
+#drag-child2 {
+    width: 33%;
+    height: 100%;
+    background-color: chartreuse;
+}
+
+#drag-child3 {
+    width: 33%;
+    height: 100%;
+    background-color: coral;
+}
+
+
+.drag-excel {
+    border-radius: 20%;
+    background-color: red;
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+    text-align: center;
+    line-height: 100%;
+}
+
+.up-drag-excel {
+    height: 50%;
+    background-color: aliceblue;
+}
+
+.down-drag-excel {
+    height: 50%;
+    background-color: darkmagenta;
+}
+
+#output-area {
+    height: 20%;
+    background-color: lightpink;
+}
