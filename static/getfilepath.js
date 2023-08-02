@@ -1,12 +1,8 @@
-// 获得进项、销项、输出文件路径
+// 获得输出文件路径
 document.getElementById("config-button").addEventListener("click", function() {
 
-    var jinxiangFilepath = document.getElementById("jinxiang-filepath").value;
-    var xiaoxiangFilepath = document.getElementById("xiaoxiang-filepath").value;
     var outputFilepath = document.getElementById("output-filepath").value;
 
-    console.log("jinxiangFilepath",jinxiangFilepath);
-    console.log("xiaoxiangFilepath",xiaoxiangFilepath);
     console.log("outputFilepath",outputFilepath);
 
     fetch('/getfilepath', {
@@ -15,12 +11,10 @@ document.getElementById("config-button").addEventListener("click", function() {
             'Content-Type': 'application/json'
         },
          body: JSON.stringify({
-            jinxiangFilepath: jinxiangFilepath,
-            xiaoxiangFilepath: xiaoxiangFilepath,
              outputFilepath: outputFilepath
         })
     })
-    .then(response => response.json())
+    .then(response => response.text())
     .then(data => {
         // 处理从后台返回的数据
         console.log(data);

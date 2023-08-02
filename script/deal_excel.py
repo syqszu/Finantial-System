@@ -8,18 +8,38 @@ import os
 
 warnings.filterwarnings('ignore')
 
+global excel_in_url, excel_out_url, excel_tofill_url, union_outdir, union_not_outdir, union_yet_outdir, union_tofill_outdir, \
+    match_out_col, match_in_col, temp_col, union_yet_df, union_not_df, union_temp_not_outdir, union_temp_yet_outdir
 
-global excel_in_url, excel_out_url, union_outdir, union_not_outdir, union_yet_outdir, union_tofill_outdir, \
-    match_out_col, match_in_col, temp_col, union_yet_df, union_not_df
-excel_in_url = r"D:\dev\ExcelUtil\temp\3月份进项.xlsx"
-excel_out_url = r"D:\dev\ExcelUtil\temp\3月份销项.xlsx"
-union_outdir = r"D:\dev\ExcelUtil\temp\out"
+
 temp_col = pd.DataFrame()
+
+
+def process_outputFilepath(outputFilepath):
+    global union_outdir
+    union_outdir = outputFilepath
+    getOutdir()
+    pre_deal()
+
+
+def process_excelFilepath(excelFilename, excelpath):
+    global excel_in_name, excel_out_name, excel_tofill_name, excel_in_url, excel_out_url, excel_tofill_url
+    if "月份进项.xlsx" in excelFilename:
+        excel_in_name = excelFilename
+        excel_in_url = excelpath
+        print("excel_in_url", excel_in_url)
+    if "月份销项.xlsx" in excelFilename:
+        excel_out_name = excelFilename
+        excel_out_url = excelpath
+        print("excel_out_url", excel_out_url)
+    if "月待填充表" in excelFilename:
+        excel_tofill_name = excelFilename
+        excel_tofill_url = excelpath
+        print("excel_tofill_url", excel_out_url)
 
 # 配置输出路径
 def getOutdir():
-    global union_not_outdir, union_yet_outdir, union_tofill_outdir
-    excel_in_name = os.path.basename(excel_in_url)
+    global union_not_outdir, union_yet_outdir, union_tofill_outdir, union_temp_not_outdir, union_temp_yet_outdir
     print("进项文件名字：", excel_in_name)
 
     month = excel_in_name[0]
@@ -28,16 +48,21 @@ def getOutdir():
     # print(union_yet_name)
     union_not_name = month + "月匹配剩余表.xlsx"
     # print(union_not_name)
-    union_tofill_name = month + "月代填充表.xlsx"
+    union_tofill_name = month + "月待填充表.xlsx"
+    union_temp_yet_name = month + "月临时匹配完成表.xlsx"
+    union_temp_not_name = month + "月临时匹配剩余表.xlsx"
 
     union_not_outdir = os.path.join(union_outdir, union_not_name)
     union_yet_outdir = os.path.join(union_outdir, union_yet_name)
     union_tofill_outdir = os.path.join(union_outdir, union_tofill_name)
+    union_temp_yet_outdir = os.path.join(union_outdir, union_temp_yet_name)
+    union_temp_not_outdir = os.path.join(union_outdir, union_temp_not_name)
 
-    print(union_not_outdir)
-    print(union_yet_outdir)
-    print(union_tofill_outdir)
-
+    print("union_not_outdir", union_not_outdir)
+    print("union_yet_outdir", union_yet_outdir)
+    print("union_tofill_outdir", union_tofill_outdir)
+    print("union_temp_yet_outdir", union_temp_yet_outdir)
+    print("union_temp_not_outdir", union_temp_not_outdir)
 
 
 # 预处理函数 excel_in_url excel_out_url 进销项excel的绝对路径
@@ -65,7 +90,7 @@ def pre_deal():
     #             print("表单中存在空值，请补全后重启程序。行索引-{},列索引-{}".format(idx + 3, col))
     #             temp_col.update(row)
     temp_in = match_in_col[match_in_col.isna().any(axis=1)]
-    temp_in["from"] = "in"
+    temp_in["来源"] = "进项"
     match_in_col = match_in_col.dropna()
     print("进项表单遍历结束")
 
@@ -80,37 +105,47 @@ def pre_deal():
     print("开始遍历销项表格")
     df_out = pd.read_excel(excel_out_url, "Sheet1", header=2)
     match_out_col = df_out[out_col]
-
     # for idx, row in match_out_col.iterrows():
     #     for col in match_out_col.columns:
     #         if pd.isna(row[col]):
     #             print("表单中存在空值，请补全后重启程序。行索引-{},列索引-{}".format(idx + 4, col))
 
     temp_out = match_out_col[match_out_col.isna().any(axis=1)]
-    temp_out["from"] = "out"
+    temp_out["来源"] = "销项"
     match_out_col = match_out_col.dropna()
 
     temp_col = pd.concat([temp_in, temp_out], ignore_index=True)
-    temp_col.to_excel(union_tofill_outdir, index=False)
-
     print("销项表单遍历结束")
     match_out_col["vis"] = 0
     match_out_col["税收分类编码"] = match_out_col["税收分类编码"].fillna(0).astype(str)
     # print()
     # print(match_out_col["税收分类编码"])
     match_out_col["税收分类编码"] = match_out_col["税收分类编码"].str.replace("'", "")
+    match_out_col.to_excel("match_out_col.xlsx", index=False)
+    match_in_col.to_excel("match_in_col.xlsx", index=False)
     # match_out_col["数量"] = match_out_col["数量"].str.replace("'", "")
     # match_out_col["单价"] = match_out_col["单价"].str.replace("'", "")
 
-
-    return match_in_col, match_out_col, in_col, out_col
+    # 如果进销项都有值，且没有上传待填充表，说明是第一次生成。
+    if temp_col.empty and not excel_tofill_url:
+        print("第一次生成，月待填充表为空")
+        get_col(1)
+    #  如果进销项都有值，但上传了待填充表，说明是第二次生成。
+    if temp_col.empty and excel_tofill_url:
+        print("第二次生成")
+    else :
+    # 进销项有的没有值，一定是第一次生成。
+        print("第一次生成，月待填充表生成完毕")
+        temp_col.to_excel(union_tofill_outdir, index=False)
+        get_col(0)
 
 
 
 # -*- coding: UTF-8 -*-
 # 具体匹配过程，返回月匹配完成表和月匹配剩余表
 # union_yet_outdir, union_not_outdir 分别是月匹配完成表和剩余表的路径。
-def get_col():
+def get_col(flag):
+
     # 月匹配完成表
     global union_yet_df, union_not_df
     union_yet_df = pd.DataFrame(
@@ -118,14 +153,19 @@ def get_col():
                  '上月原数量', '上月程序出库数', '上月人工出库数', '本月剩余数量', '不含税单价',
                  '不含税金额', '含税单价', '含税总金额', '供应商',  # 16 销项
 
-                 '开票日期1', '序号1', '发票日期1', '税收分类编码1', '货物、应税劳务及服务1', '规格型号1', '单位1',
+                 '开票日期1', '序号1', '发票号码1', '税收分类编码1', '货物、应税劳务及服务1', '规格型号1', '单位1',
                  '上月原数量1', '上月程序出库数1', '上月人工出库数1', '本月剩余数量1', '不含税单价1',
                  '不含税金额1', '含税单价1', '含税总金额1', '销方名称'  # 进项
                  ])
-    union_not_df = union_yet_df.copy()  # 月剩余待匹配表
+    union_not_df = union_yet_df.copy()  # 月匹配剩余表
+    union_temp_not_df = union_yet_df.copy() #月临时匹配剩余表
+    union_temp_yet_df = union_yet_df.copy() #月临时匹配完成表
     id = 1
+    if flag == 1:
     # 暴力循环
-    print("月匹配完成表开始生成")
+        print("月匹配完成表开始生成")
+    else:
+        print("月临时匹配完成表开始生成")
     for idx_out, row_out in match_out_col.iterrows():
         for idx_in, row_in in match_in_col.iterrows():
 
@@ -223,7 +263,7 @@ def get_col():
                                 "上月人工出库数1": 0,
                                 "本月剩余数量1": remain_nums_in, "不含税单价1": notax_perprice_in,
                                 "不含税金额1": notax_money_in,
-                                "含税单价1": tax_perprice_in, "含税金额1": tax_money_in, "供应商": name_in})
+                                "含税单价1": tax_perprice_in, "含税总金额1": tax_money_in, "供应商": name_in})
 
                 union_yet_df = union_yet_df.append(yet_row, ignore_index=True)
 
@@ -233,8 +273,16 @@ def get_col():
                     match_out_col.at[idx_out, "vis"] = match_in_col.at[idx_in, "vis"] = 2
 
                 id += 1
-    print("月匹配完成表生成完毕")
-    print("月匹配剩余表开始生成")
+    if flag == 1:
+        union_yet_df.to_excel(union_yet_outdir, index=False)
+        create_union_excel(union_yet_outdir)
+        print("月匹配完成表生成完毕")
+        print("月匹配剩余表开始生成")
+    else:
+        union_yet_df.to_excel(union_temp_yet_outdir, index=False)
+        create_union_excel(union_temp_yet_outdir)
+        print("月临时匹配完成表生成完毕")
+        print("月临时匹配剩余表开始生成")
     # 生成未匹配表
     id = 1
     for idx_out, row_out in match_out_col.iterrows():
@@ -285,27 +333,36 @@ def get_col():
                        "含税单价1": tax_perprice_in, "含税总金额1": tax_money_in, "销方名称": name_in}
             union_not_df = union_not_df.append(not_row, ignore_index=True)
     # print(union_yet_df)
-    print("月匹配剩余表生成完毕")
     # 1080207990000000000 是完全一致的
-    # union_yet_df.to_excel(union_yet_outdir, index=False)
-    # union_not_df.to_excel(union_not_outdir, index=False)
+    if flag == 1:
+        union_not_df.to_excel(union_not_outdir, index=False)
+        create_union_excel(union_not_outdir)
+        print("月匹配剩余表生成完毕")
+    else:
+        union_not_df.to_excel(union_temp_not_outdir, index=False)
+        create_union_excel(union_temp_not_outdir)
+        print("月临时匹配剩余表生成完毕")
 
 
-def create_union_excel():
+def create_union_excel(url):
     # 创建一个新的工作簿 选择活动工作表
-    wb = openpyxl.Workbook()
+    wb = openpyxl.load_workbook(url)
     ws = wb.active
 
     # 定义填充颜色
     blue_fill = PatternFill(fill_type='solid', fgColor='FFDDEBF7')
     orange_fill = PatternFill(fill_type='solid', fgColor='FFFFE699')
 
+    endrow = ws.max_row + 1
     # 填充A-P列为蓝色 Q-AF列为橙色
     for col in range(1, 17):
-        ws.cell(row=1, column=col).fill = blue_fill
+        for row in range(1, endrow):
+            ws.cell(row=row, column=col).fill = blue_fill
     for col in range(17, 33):
-        ws.cell(row=1, column=col).fill = orange_fill
+        for row in range(1, endrow):
+            ws.cell(row=row, column=col).fill = orange_fill
 
+    ws.insert_rows(1)
     ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=16)
     ws.cell(row=1, column=1).value = "销项"
     ws.cell(row=1, column=1).fill = blue_fill
@@ -318,33 +375,34 @@ def create_union_excel():
     ws.cell(row=1, column=17).alignment = Alignment(horizontal='center')
 
     # 定义列名列表
-    column_names = ["开票日期", "序号", "发票号码", "税收分类编码", "货物、应税劳务及服务", "规格型号", "单位",
-                    "上月原数量", "上月程序出库数",
-                    "上月人工出库数", "本月剩余数量", "不含税单价", "不含税金额", "含税单价", "含税总金额", "销方名称",
-                    "开票日期", "序号", "发票号码", "税收分类编码", "货物、应税劳务及服务", "规格型号", "单位",
-                    "上月原数量", "上月程序出库数",
-                    "上月人工出库数", "本月剩余数量", "不含税单价", "不含税金额", "含税单价", "含税总金额", "供应商"]
+    # column_names = ["开票日期", "序号", "发票号码", "税收分类编码", "货物、应税劳务及服务", "规格型号", "单位",
+    #                 "上月原数量", "上月程序出库数",
+    #                 "上月人工出库数", "本月剩余数量", "不含税单价", "不含税金额", "含税单价", "含税总金额", "销方名称",
+    #                 "开票日期1", "序号1", "发票号码1", "税收分类编码1", "货物、应税劳务及服务1", "规格型号1", "单位1",
+    #                 "上月原数量1", "上月程序出库数1",
+    #                 "上月人工出库数1", "本月剩余数量1", "不含税单价1", "不含税金额1", "含税单价1", "含税总金额1",
+    #                 "供应商1"]
     # 设置第二行的列名
-    for index, name in enumerate(column_names):
-        ws.cell(row=2, column=index + 1).value = name
+    # for index, name in enumerate(column_names):
+    #     ws.cell(row=3, column=index + 1).value = name
 
-    bigger_columns = ['D', 'H', 'I', 'J', 'K', 'L', 'M', 'O', 'T', 'X', 'Y', 'Z', 'AA', 'AB', 'AC', 'AE']
+    bigger_columns = ['A', 'D', 'H', 'I', 'J', 'K', 'L', 'M', 'O', 'Q', 'T', 'X', 'Y', 'Z', 'AA', 'AB', 'AC', 'AD', 'AE']
     for column in bigger_columns:
-        ws.column_dimensions[column].width = 15
+        ws.column_dimensions[column].width = 17
+    ws.column_dimensions['U'].width = 25
     ws.column_dimensions['E'].width = 25
     ws.column_dimensions['AF'].width = 25
 
     # 保存文件
-    wb.save('union_table.xlsx')
+    wb.save(url)
 
-
-if __name__ == '__main__':
-    print("开始配置输出路径")
-    getOutdir()
-    print("得到输出路径")
-    print("开始预处理")
-    pre_deal()
-    print("预处理完毕")
-    get_col()
-    # getOutdir()
-    # create_union_excel()
+# if __name__ == '__main__':
+#     print("开始配置输出路径")
+#     getOutdir()
+#     print("得到输出路径")
+# print("开始预处理")
+# pre_deal()
+# print("预处理完毕")
+# get_col()
+# getOutdir()
+# create_union_excel()
