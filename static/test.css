@@ -1,0 +1,240 @@
+html,
+body {
+    height: 100%;
+}
+
+#background {
+    background-image: url("background.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+}
+
+@media screen and (max-width: 768px) {
+    #background {
+        background-size: contain;
+    }
+}
+
+#top-bar {
+    height: 10vh;
+    background-color: lightblue;
+    text-align: left;
+    line-height: 10vh;
+    display: flex;
+    align-items: center;
+}
+
+#logo {
+    height: 8vh;
+    margin-left: 10px;
+}
+
+#title {
+    margin-left: 20px;
+}
+
+#transparent-white {
+    position: relative;
+    /* position: absolute; */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(90% - 10vh);
+    background-color: white;
+    opacity: 0.5;
+}
+
+#input-area {
+    height: 75%;
+    width: 100%;
+    display: flex;
+}
+
+#left-input-area {
+    position: relative;
+    width: 70%;
+    height: 100%;
+}
+
+#right-input-area {
+    position: relative;
+    width: 30%;
+    height: 100%;
+}
+
+.right-input-child {
+    height: 33%;
+}
+
+.right-up-input {
+    height: 50%;
+    display: flex;
+    justify-content: left;
+    align-items: end;
+}
+
+.right-logo {
+    height: 20%;
+    margin-left: 3%;
+    margin-bottom: 3%;
+}
+
+.right-up-input-words {
+    margin-left: 0.5%;
+    margin-bottom: 3%;
+}
+
+.right-down-input {
+    height: 50%;
+}
+
+#jinxiang-filepath,
+#xiaoxiang-filepath,
+#output-filepath {
+    margin-left: 3%;
+    margin-top: 2%;
+    width: 80%;
+    background-color: #DDE7EA;
+}
+
+#output-filepath {
+    background-color: #5F84A5;
+}
+
+
+#instruction-area {
+    position: relative;
+    height: 40%;
+    width: 100%;
+}
+
+#instruction-title {
+    height: 20%;
+}
+
+#instruction-logo {
+    width: 2%;
+    margin-left: 3%;
+    margin-top: 1%;
+}
+
+#instruction {
+    font-weight: bolder;
+    font-size: larger;
+    bottom: 0;
+}
+
+#instruction-words {
+    height: 80%;
+}
+
+
+h4 {
+    margin-left: 4%;
+    /* margin-top: 0.8%; */
+}
+
+#drag-area {
+    height: 60%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.drag-child {
+    width: 33%;
+    height: 100%;
+}
+
+.drag-excel {
+    border-radius: 20%;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #E4E4DD;
+}
+
+.drag-excel.success{
+    background-color: #5F84A5;
+}
+
+.up-drag-excel {
+    height: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+.down-drag-excel {
+    height: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.drag-center {
+    text-align: center;
+}
+
+.drag-center img {
+    max-width: 80%;
+    max-height: 80%;
+    transform: scale(0.5);
+}
+
+#output-area {
+    height: 25%;
+}
+
+#button-area {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    height: 50%;
+}
+
+.button {
+    /* width: calc(33.333% - 10px); */
+    width: 50%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 5px;
+    outline: 5px;
+    cursor: pointer;
+    font-size: 2vh;
+    font-weight: bold;
+}
+
+#progress-area {
+    height: 50%;
+    display: none;
+    align-items: center;
+}
+
+#progress-bar {
+    width: 200px;
+    height: 20px;
+    border: 1px solid black;
+    margin-left: 10px;
+}
+
+#progress-bar.active::before {
+    content: '';
+    display: block;
+    width: 0;
+    height: 100%;
+    background-color: green;
+    animation: progress 10s linear;
+}
+
+@keyframes progress {
+    from { width: 0; }
+    to { width: 100%; }
+}

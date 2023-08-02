@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="UTF-8">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="../static/test.css" />
+</head>
+
+<body>
+    <div id="drag-area">
+        <div class="drag-child" id="drag-child1">
+            <div class="drag-excel" id="drag-excel1">
+                <div class="up-drag-excel">
+                    <div class="drag-center">
+                        <h3>本月进项文件/</h3>
+                        <h3>匹配临时完成表</h3>
+                    </div>
+                </div>
+                <div class="down-drag-excel">
+                    <div class="drag-center">
+                        <img src="../static/add_file.png" alt="文件加载图片错误">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="drag-child" id="drag-child2">
+            <div class="drag-excel" id="drag-excel2">
+                <div class="up-drag-excel">
+                    <div class="drag-center">
+                        <h3>本月销项文件/</h3>
+                        <h3>匹配临时剩余表</h3>
+                    </div>
+                </div>
+                <div class="down-drag-excel">
+                    <div class="drag-center">
+                        <img src="../static/add_file.png" alt="文件加载图片错误">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="drag-child" id="drag-child3">
+            <div class="drag-excel" id="drag-excel3">
+                <div class="up-drag-excel">
+                    <div class="drag-center">
+                        <h3>上月剩余匹配文件/</h3>
+                        <h3>匹配代填充表</h3>
+                    </div>
+                </div>
+                <div class="down-drag-excel">
+                    <div class="drag-center">
+                        <img src="../static/add_file.png" alt="文件加载图片错误">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <div id="output-area">
+        <div id="button-area">
+            <button class="button" id="config-button">配置</button>
+            <button class="button" id="merge-button">合并</button>
+        </div>
+        <div id="progress-area">
+            <div id="progress-bar"></div>
+            <span id="progress-text" >正在合并中</span>
+        </div>
+    </div>
+
+    <script src="../static/dragtest.js"></script>
+</body>
+
+</html>
