@@ -4,7 +4,7 @@ body {
 }
 
 #background {
-    background-image: url("../template/background.png");
+    background-image: url("static/img/background.png");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -141,7 +141,6 @@ h4 {
 }
 
 #drag-area {
-    position: flex;
     height: 60%;
     width: 100%;
     display: flex;

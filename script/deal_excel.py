@@ -10,13 +10,14 @@ warnings.filterwarnings('ignore')
 
 global excel_in_url, excel_out_url, union_outdir, union_not_outdir, union_yet_outdir, union_tofill_outdir, \
     match_out_col, match_in_col, temp_col, union_yet_df, union_not_df
+
+# 配置进项文件、销项文件还有输出文件的路径。
 excel_in_url = r"D:\dev\ExcelUtil\temp\3月份进项.xlsx"
 excel_out_url = r"D:\dev\ExcelUtil\temp\3月份销项.xlsx"
 union_outdir = r"D:\dev\ExcelUtil\temp\out"
 temp_col = pd.DataFrame()
 
 
-# 配置输出路径
 def getOutdir():
     global union_not_outdir, union_yet_outdir, union_tofill_outdir
     excel_in_name = os.path.basename(excel_in_url)
