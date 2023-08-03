@@ -1,13 +1,12 @@
 import os
-
+import traceback
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
-from script.deal_excel import process_outputFilepath, process_excelFilepath
+from script.deal_excel import process_outputFilepath, process_excelFilepath, getOutdir, pre_deal, get_col, \
+    create_union_excel
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
-
-import traceback
 
 
 @app.errorhandler(Exception)

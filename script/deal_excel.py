@@ -11,7 +11,6 @@ warnings.filterwarnings('ignore')
 global excel_in_url, excel_out_url, excel_tofill_url, union_outdir, union_not_outdir, union_yet_outdir, union_tofill_outdir, \
     match_out_col, match_in_col, temp_col, union_yet_df, union_not_df, union_temp_not_outdir, union_temp_yet_outdir
 
-
 temp_col = pd.DataFrame()
 
 
@@ -36,6 +35,7 @@ def process_excelFilepath(excelFilename, excelpath):
         excel_tofill_name = excelFilename
         excel_tofill_url = excelpath
         print("excel_tofill_url", excel_out_url)
+
 
 # 配置输出路径
 def getOutdir():
@@ -89,26 +89,29 @@ def pre_deal():
     #         if pd.isna(row[col]):
     #             print("表单中存在空值，请补全后重启程序。行索引-{},列索引-{}".format(idx + 3, col))
     #             temp_col.update(row)
+
+    # 将进项表格中含有空值的行提取出来，放到temp_in里，用以后续生成“待填充表”。同时进项表格中删去这些含有空值的行
     temp_in = match_in_col[match_in_col.isna().any(axis=1)]
     temp_in["来源"] = "进项"
     match_in_col = match_in_col.dropna()
     print("进项表单遍历结束")
 
-    # 3、提取关键列，添加vis列。将税收分类编码转化为str，方便后续操作
+    # 3、提取关键列，添加vis列。将税收分类编码、发票号码转化为object类型，数量转化为int类型，方便后续操作
     match_in_col["vis"] = 0
-    match_in_col["税收分类编码"] = match_in_col["税收分类编码"].fillna(0).astype(str)
-    # print(match_in_col["税收分类编码"])
+    match_in_col["税收分类编码"] = match_in_col["税收分类编码"].astype(str)
+    match_in_col["发票号码"] = match_in_col["发票号码"].astype(str)
+    match_in_col["数量"] = match_in_col["数量"].astype(int)
 
-    # 4、如果有关键数值含有单引号，去除单引号
+    # 4、如果有关键数值含有单引号，去除单引号。税率改为float类型的数据。增加含税单价的列。将进项表单按照含税单价排列。
     match_in_col["税收分类编码"] = match_in_col["税收分类编码"].str.replace("'", "")
+    match_in_col['税率'] = match_in_col['税率'].str.strip().str.rstrip('%').astype(float) / 100
+    match_in_col["含税单价"] = match_in_col["单价"] * (1 + match_in_col["税率"])
+
+    match_in_col = match_in_col.sort_values('含税单价')
 
     print("开始遍历销项表格")
     df_out = pd.read_excel(excel_out_url, "Sheet1", header=2)
     match_out_col = df_out[out_col]
-    # for idx, row in match_out_col.iterrows():
-    #     for col in match_out_col.columns:
-    #         if pd.isna(row[col]):
-    #             print("表单中存在空值，请补全后重启程序。行索引-{},列索引-{}".format(idx + 4, col))
 
     temp_out = match_out_col[match_out_col.isna().any(axis=1)]
     temp_out["来源"] = "销项"
@@ -117,14 +120,15 @@ def pre_deal():
     temp_col = pd.concat([temp_in, temp_out], ignore_index=True)
     print("销项表单遍历结束")
     match_out_col["vis"] = 0
-    match_out_col["税收分类编码"] = match_out_col["税收分类编码"].fillna(0).astype(str)
-    # print()
-    # print(match_out_col["税收分类编码"])
+    match_out_col["税收分类编码"] = match_out_col["税收分类编码"].astype(str)
+    match_out_col["发票号码"] = match_out_col["发票号码"].astype(str)
+    match_out_col["数量"] = match_out_col["数量"].astype(int)
+
     match_out_col["税收分类编码"] = match_out_col["税收分类编码"].str.replace("'", "")
-    match_out_col.to_excel("match_out_col.xlsx", index=False)
-    match_in_col.to_excel("match_in_col.xlsx", index=False)
-    # match_out_col["数量"] = match_out_col["数量"].str.replace("'", "")
-    # match_out_col["单价"] = match_out_col["单价"].str.replace("'", "")
+    match_out_col['税率'] = match_out_col['税率'].str.strip().str.rstrip('%').astype(float) / 100
+    match_out_col["含税单价"] = match_out_col["单价"] * (1 + match_in_col["税率"])
+
+    match_out_col = match_out_col.sort_values('含税单价')
 
     # 如果进销项都有值，且没有上传待填充表，说明是第一次生成。
     if temp_col.empty and not excel_tofill_url:
@@ -133,19 +137,17 @@ def pre_deal():
     #  如果进销项都有值，但上传了待填充表，说明是第二次生成。
     if temp_col.empty and excel_tofill_url:
         print("第二次生成")
-    else :
-    # 进销项有的没有值，一定是第一次生成。
+    else:
+        # 进销项有的没有值，一定是第一次生成。
         print("第一次生成，月待填充表生成完毕")
         temp_col.to_excel(union_tofill_outdir, index=False)
         get_col(0)
-
 
 
 # -*- coding: UTF-8 -*-
 # 具体匹配过程，返回月匹配完成表和月匹配剩余表
 # union_yet_outdir, union_not_outdir 分别是月匹配完成表和剩余表的路径。
 def get_col(flag):
-
     # 月匹配完成表
     global union_yet_df, union_not_df
     union_yet_df = pd.DataFrame(
@@ -158,11 +160,11 @@ def get_col(flag):
                  '不含税金额1', '含税单价1', '含税总金额1', '销方名称'  # 进项
                  ])
     union_not_df = union_yet_df.copy()  # 月匹配剩余表
-    union_temp_not_df = union_yet_df.copy() #月临时匹配剩余表
-    union_temp_yet_df = union_yet_df.copy() #月临时匹配完成表
+    union_temp_not_df = union_yet_df.copy()  # 月临时匹配剩余表
+    union_temp_yet_df = union_yet_df.copy()  # 月临时匹配完成表
     id = 1
     if flag == 1:
-    # 暴力循环
+        # 暴力循环
         print("月匹配完成表开始生成")
     else:
         print("月临时匹配完成表开始生成")
@@ -174,34 +176,33 @@ def get_col(flag):
             number_out = row_out["发票号码"]
             number_in = row_in["发票号码"]
             loads_out = row_out["货物、应税劳务及服务"]
-            loads_in = row_out["货物、应税劳务及服务"]
+            loads_in = row_in["货物、应税劳务及服务"]
             size_out = row_out["规格型号"]
-            size_in = row_out["规格型号"]
+            size_in = row_in["规格型号"]
             unit_out = row_out["单位"]
-            unit_in = row_out["单位"]
+            unit_in = row_in["单位"]
             origin_nums_out = row_out["数量"]  # 销项上月原数量
             origin_nums_in = row_in["数量"]  # 进项上月原数量
-
-            notax_perprice_out = float(row_out["单价"])  # 销项不含税单价
-            notax_perprice_in = float(row_in["单价"])  # 进项不含税单价
+            notax_perprice_out = row_out["单价"]   # 销项不含税单价
+            notax_perprice_in = row_in["单价"]  # 进项不含税单价
 
             notax_money_out = row_out["金额"]  # 销项不含税金额
             notax_money_in = row_in["金额"]  # 进项不含税金额
 
-            tax_out = float(row_out["税率"].strip("%")) / 100  # 销项税率
-            tax_in = float(row_in["税率"].strip("%")) / 100  # 进项税率
+            tax_out = row_out["税率"]  # 销项税率
+            tax_in = row_in["税率"]  # 进项税率
 
             # print(type(row_in["税率"]))
             # print(row_in["税率"])
 
-            tax_perprice_out = notax_perprice_out * (1 + tax_out)  # 销项含税单价
-            tax_perprice_in = notax_perprice_in * (1 + tax_in)  # 进项含税单价
+            tax_perprice_out = row_out["含税单价"]  # 销项含税单价
+            tax_perprice_in = row_in["含税单价"]  # 进项含税单价
 
             tax_money_out = row_out["价税合计"]  # 销项含税总金额
             tax_money_in = row_in["价税合计"]  # 进项含税总金额
 
-            name_out = row_in["销方名称"]  # 销方名称
-            name_in = row_out["购方名称"]  # 供应商
+            name_in = row_in["销方名称"]  # 销方名称
+            name_out = row_out["购方名称"]  # 供应商
 
             difference = abs(tax_perprice_in - tax_perprice_out)
             percentage_differ = (difference / tax_perprice_in) * 100
@@ -256,14 +257,14 @@ def get_col(flag):
 
                 yet_row.update(
                     {"不含税单价": notax_perprice_out, "不含税金额": notax_money_out, "含税单价": tax_perprice_out,
-                     "含税总金额": tax_money_out, "销方名称": name_out})
+                     "含税总金额": tax_money_out, "供应商": name_out})
                 yet_row.update({"开票日期1": date_in, "序号1": id, "发票号码1": number_in, "税收分类编码1": row_in[0],
                                 "货物、应税劳务及服务1": loads_in, "规格型号1": size_in, "单位1": unit_in,
                                 "上月原数量1": origin_nums_in, "上月程序出库数1": outbound_pro_nums_in,
                                 "上月人工出库数1": 0,
                                 "本月剩余数量1": remain_nums_in, "不含税单价1": notax_perprice_in,
                                 "不含税金额1": notax_money_in,
-                                "含税单价1": tax_perprice_in, "含税总金额1": tax_money_in, "供应商": name_in})
+                                "含税单价1": tax_perprice_in, "含税总金额1": tax_money_in, "销方名称": name_in})
 
                 union_yet_df = union_yet_df.append(yet_row, ignore_index=True)
 
@@ -293,10 +294,9 @@ def get_col(flag):
             size_out = row_out["规格型号"]
             unit_out = row_out["单位"]
             origin_nums_out = remain_nums_out = row_out["数量"]  # 销项上月原数量=本月剩余数量=销项文件的数量
-            notax_perprice_out = float(row_out["单价"])  # 销项不含税单价
+            notax_perprice_out = row_out["单价"]  # 销项不含税单价
             notax_money_out = row_out["金额"]  # 销项不含税金额
-            tax_out = float(row_out["税率"].strip("%")) / 100  # 销项税率
-            tax_perprice_out = notax_perprice_out * (1 + tax_out)  # 销项含税单价
+            tax_perprice_out = row_out["含税单价"]  # 销项含税单价
             tax_money_out = row_out["价税合计"]  # 销项含税总金额
             name_out = row_out["购方名称"]  # 供应商
             not_row = {"开票日期": date_out, "序号": id, "发票号码": number_out,
@@ -318,10 +318,9 @@ def get_col(flag):
             size_in = row_out["规格型号"]
             unit_in = row_out["单位"]
             origin_nums_in = remain_nums_in = row_in["数量"]  # 进项上月原数量=本月剩余数量=销项文件的数量
-            notax_perprice_in = float(row_in["单价"])  # 进项不含税单价
+            notax_perprice_in = row_in["单价"]  # 进项不含税单价
+            tax_perprice_in = row_out["含税单价"]  # 进项含税单价
             notax_money_in = row_in["金额"]  # 进项不含税金额
-            tax_in = float(row_in["税率"].strip("%")) / 100  # 进项税率
-            tax_perprice_in = notax_perprice_in * (1 + tax_in)  # 进项含税单价
             tax_money_in = row_in["价税合计"]  # 进项含税总金额
             name_in = row_in["销方名称"]  # 销方名称
             not_row = {"开票日期1": date_in, "序号1": id, "发票号码1": number_in, "税收分类编码1": row_in[0],
@@ -386,7 +385,8 @@ def create_union_excel(url):
     # for index, name in enumerate(column_names):
     #     ws.cell(row=3, column=index + 1).value = name
 
-    bigger_columns = ['A', 'D', 'H', 'I', 'J', 'K', 'L', 'M', 'O', 'Q', 'T', 'X', 'Y', 'Z', 'AA', 'AB', 'AC', 'AD', 'AE']
+    bigger_columns = ['A', 'D', 'H', 'I', 'J', 'K', 'L', 'M', 'O', 'Q', 'T', 'X', 'Y', 'Z', 'AA', 'AB', 'AC', 'AD',
+                      'AE']
     for column in bigger_columns:
         ws.column_dimensions[column].width = 17
     ws.column_dimensions['U'].width = 25
