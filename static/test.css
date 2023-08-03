@@ -4,7 +4,7 @@ body {
 }
 
 #background {
-    background-image: url("static/img/background.png");
+    background-image: url("./img/background.png");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -19,8 +19,8 @@ body {
 }
 
 #top-bar {
-    background-color: lightblue;
     height: 10vh;
+    background-color: lightblue;
     text-align: left;
     line-height: 10vh;
     display: flex;
@@ -147,21 +147,10 @@ h4 {
     justify-content: space-between;
 }
 
-#drag-child1 {
+.drag-child {
     width: 33%;
     height: 100%;
 }
-
-#drag-child2 {
-    width: 33%;
-    height: 100%;
-}
-
-#drag-child3 {
-    width: 33%;
-    height: 100%;
-}
-
 
 .drag-excel {
     border-radius: 20%;
@@ -169,6 +158,10 @@ h4 {
     height: 100%;
     overflow: hidden;
     background-color: #E4E4DD;
+}
+
+.drag-excel.success{
+    background-color: #5F84A5;
 }
 
 .up-drag-excel {
@@ -203,16 +196,18 @@ h4 {
 
 #button-area {
     display: flex;
+    justify-content: left;
     align-items: center;
     height: 50%;
 }
 
 .button {
     /* width: calc(33.333% - 10px); */
-    width: 15%;
-    height: 50%;
-    margin-right: 10%;
-    margin-top: 5%;
+    width: 50%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border: 5px;
     outline: 5px;
     cursor: pointer;
@@ -220,10 +215,35 @@ h4 {
     font-weight: bold;
 }
 
-.button:first-child {
-    margin-left: 35%;
+#progress-area {
+    height: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
 }
 
 #progress-bar {
-    height: 50%;
+    width: 200px;
+    height: 20px;
+    border: 1px solid black;
+    margin-left: 10px;
 }
+
+#progress-bar.active::before {
+    content: '';
+    display: block;
+    width: 0;
+    height: 100%;
+    background-color: green;
+    animation: progress 10s linear;
+}
+
+#progress-text{
+    margin-left: 10px;
+}
+
+@keyframes progress {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
