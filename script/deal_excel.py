@@ -8,13 +8,13 @@ import os
 
 warnings.filterwarnings('ignore')
 
-
 global excel_in_url, excel_out_url, union_outdir, union_not_outdir, union_yet_outdir, union_tofill_outdir, \
     match_out_col, match_in_col, temp_col, union_yet_df, union_not_df
 excel_in_url = r"D:\dev\ExcelUtil\temp\3月份进项.xlsx"
 excel_out_url = r"D:\dev\ExcelUtil\temp\3月份销项.xlsx"
 union_outdir = r"D:\dev\ExcelUtil\temp\out"
 temp_col = pd.DataFrame()
+
 
 # 配置输出路径
 def getOutdir():
@@ -37,7 +37,6 @@ def getOutdir():
     print(union_not_outdir)
     print(union_yet_outdir)
     print(union_tofill_outdir)
-
 
 
 # 预处理函数 excel_in_url excel_out_url 进销项excel的绝对路径
@@ -71,8 +70,24 @@ def pre_deal():
 
     # 3、提取关键列，添加vis列。将税收分类编码转化为str，方便后续操作
     match_in_col["vis"] = 0
-    match_in_col["税收分类编码"] = match_in_col["税收分类编码"].fillna(0).astype(str)
-    # print(match_in_col["税收分类编码"])
+    # print("type of match_in_col[税收分类编码] before")
+    # print(match_in_col["税收分类编码"].dtype)
+    # float64
+    match_in_col["税收分类编码"] = match_in_col["税收分类编码"].astype(str)
+    match_in_col["发票号码"] = match_in_col["发票号码"].astype(str)
+    print("type of match_in_col[发票号码] after")
+    print(match_in_col["发票号码"].dtype)
+
+    match_in_col["数量"] = match_in_col["数量"].astype(int)
+    print("type of match_in_col[数量] after")
+    print(match_in_col["数量"].dtype)
+
+    # match_in_col["税率"] = float(match_in_col["税率"].strip("%")) / 100  # 销项税率
+    match_in_col['税率'] = match_in_col['税率'].str.strip().str.rstrip('%').astype(float) / 100
+    match_in_col["含税单价"] = match_in_col["单价"] * (1 + match_in_col["税率"])
+    match_in_col = match_in_col.sort_values('含税单价')
+    match_in_col.to_excel("test.xlsx", index=False)
+    # object
 
     # 4、如果有关键数值含有单引号，去除单引号
     match_in_col["税收分类编码"] = match_in_col["税收分类编码"].str.replace("'", "")
@@ -101,10 +116,14 @@ def pre_deal():
     match_out_col["税收分类编码"] = match_out_col["税收分类编码"].str.replace("'", "")
     # match_out_col["数量"] = match_out_col["数量"].str.replace("'", "")
     # match_out_col["单价"] = match_out_col["单价"].str.replace("'", "")
-
+    print("match_out_col")
+    for col_name, dtype in match_out_col.dtypes.iteritems():
+        print(f"列名: {col_name}, 数据类型: {dtype}")
+    print("match_in_col")
+    for col_name, dtype in match_in_col.dtypes.iteritems():
+        print(f"列名: {col_name}, 数据类型: {dtype}")
 
     return match_in_col, match_out_col, in_col, out_col
-
 
 
 # -*- coding: UTF-8 -*-
