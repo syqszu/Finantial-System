@@ -1,5 +1,7 @@
 import os
 
+global union_not_outdir, union_yet_outdir, union_tofill_outdir, union_temp_not_outdir, union_temp_yet_outdir
+
 def get_name_and_filepath(excel_in_url, union_outdir):
     """
     通过进项文件的绝对路径和进项文件的绝对父路径，生成临时完成表、临时剩余表、待填充表、匹配完成表、匹配剩余表的名字和绝对路径。
@@ -7,10 +9,12 @@ def get_name_and_filepath(excel_in_url, union_outdir):
     union_outdir:进项文件的绝对父路径
     :return:临时完成表、临时剩余表、待填充表、匹配完成表、匹配剩余表的名字和绝对路径。
     """
-    excel_in_name = os.path.basename(excel_in_url)
     global union_not_outdir, union_yet_outdir, union_tofill_outdir, union_temp_not_outdir, union_temp_yet_outdir
+    excel_in_name = os.path.basename(excel_in_url)
+
     # print("进项文件名字：", excel_in_name)
     month = excel_in_name[0]
+
     union_yet_name = month + "月匹配完成表.xlsx"
     # print(union_yet_name)
     union_not_name = month + "月匹配剩余表.xlsx"
@@ -30,3 +34,5 @@ def get_name_and_filepath(excel_in_url, union_outdir):
     print("union_tofill_outdir", union_tofill_outdir)
     print("union_temp_yet_outdir", union_temp_yet_outdir)
     print("union_temp_not_outdir", union_temp_not_outdir)
+
+    return union_not_outdir, union_yet_outdir, union_tofill_outdir, union_temp_not_outdir, union_temp_yet_outdir

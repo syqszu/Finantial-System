@@ -18,11 +18,17 @@ def pre_deal(excel_in_url, excel_out_url, union_tofill_outdir):
     # 返回只含有关键列的进销项dataframe和关键列在原excel中的列名
     :return: match_in_col, match_out_col, [match_tofill_col]
     """
-    global in_col, out_col, match_in_col, match_out_col
+    global in_col, out_col, column_names, match_in_col, match_out_col
     in_col = ["税收分类编码", "发票号码", "开票日期", "销方名称", "货物、应税劳务及服务", "规格型号", "数量", "单价",
               "单位", "金额", "税率", "价税合计"]
     out_col = ["税收分类编码", "发票号码", "开票日期", "购方名称", "货物、应税劳务及服务", "规格型号", "数量", "单价",
                "单位", "金额", "税率", "价税合计", "备注"]
+    column_names = ["开票日期", "序号", "发票号码", "税收分类编码", "货物、应税劳务及服务", "规格型号", "单位",
+                    "上月原数量", "上月程序出库数",
+                    "上月人工出库数", "本月剩余数量", "不含税单价", "不含税金额", "含税单价", "含税总金额", "供应商",
+                    "开票日期1", "序号1", "发票号码1", "税收分类编码1", "货物、应税劳务及服务1", "规格型号1", "单位1",
+                    "上月原数量1", "上月程序出库数1",
+                    "上月人工出库数1", "本月剩余数量1", "不含税单价1", "不含税金额1", "含税单价1", "含税总金额1", "销方名称"]
 
     # 1、读取进项表格
     print("开始预处理进项表格")
@@ -81,8 +87,12 @@ def pre_deal(excel_in_url, excel_out_url, union_tofill_outdir):
 
     # 6、如果2中有空值，生成”待填充表“。
     match_tofill_col = pd.concat([temp_in, temp_out], ignore_index=True)
-    if match_tofill_col:
+    flag = 0
+    if match_tofill_col.empty:
+        print("待填充表为空")
+    else:
+        flag = 1
         match_tofill_col.to_excel(union_tofill_outdir, index=False)
         print("待填充表生成完毕")
-    else:
-        print("待填充表为空")
+
+    return in_col, out_col, column_names, match_in_col, match_out_col, flag
