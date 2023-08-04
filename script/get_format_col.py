@@ -35,12 +35,12 @@ def get_format_col(url):
                 lastmonth_in_col = lastmonth_in_col.append(row[18:36])
             else:
                 lastmonth_out_col = lastmonth_out_col.append(row[0:18])
-        print("改名前")
-        print("out.columns")
-        print(lastmonth_out_col.columns)
-
-        print("in.columns")
-        print(lastmonth_in_col.columns)
+        # print("改名前")
+        # print("out.columns")
+        # print(lastmonth_out_col.columns)
+        #
+        # print("in.columns")
+        # print(lastmonth_in_col.columns)
 
         lastmonth_out_col = lastmonth_out_col.rename(
             columns={"本月剩余数量": "数量", "不含税单价": "单价", "不含税金额": "金额","含税总金额":"价税合计", "供应商": "购方名称"})
@@ -54,12 +54,12 @@ def get_format_col(url):
                      "不含税金额1": "金额"})
         lastmonth_in_col = lastmonth_in_col.drop(["上月原数量1", "上月程序出库数1", "上月人工出库数1"], axis=1)
 
-        print("改名后")
-        print("out.columns")
-        print(lastmonth_out_col.columns)
-
-        print("in.columns")
-        print(lastmonth_in_col.columns)
+        # print("改名后")
+        # print("out.columns")
+        # print(lastmonth_out_col.columns)
+        #
+        # print("in.columns")
+        # print(lastmonth_in_col.columns)
 
         lastmonth_out_col.to_excel("lastmonth_out_col.xlsx", index=False)
         lastmonth_in_col.to_excel("lastmonth_in_col.xlsx", index=False)
@@ -75,10 +75,8 @@ def get_format_col(url):
 
     if "销项.xlsx" in url:
         out_col = ["税收分类编码", "发票号码", "开票日期", "购方名称", "货物、应税劳务及服务", "规格型号", "数量",
-                   "单价",
-                   "单位", "金额", "税率", "价税合计", "备注"]
-        # 1、读取表格
-        print("开始预处理销项表格")
+                   "单价", "单位", "金额", "税率", "价税合计", "备注"]
+        print("开始处理销项表格")
         df_out = pd.read_excel(url, "Sheet1", header=2)
         match_out_col = df_out[out_col]
         return match_out_col

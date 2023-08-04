@@ -3,19 +3,20 @@ import pandas as pd
 from script.format_excel import format_excel
 
 
-def process(tofill_flag, union_df, match_out_col, match_in_col, in_col, out_col, union_yet_outdir, union_not_outdir, union_temp_not_outdir, union_temp_yet_outdir):
+def process(tofill_flag, union_df, match_out_col, match_in_col, in_col, out_col, union_yet_outdir, union_not_outdir):
     """
-    输入match_in_col和match_out_col。生成 1、临时完成表+临时剩余表。2、匹配完成表+匹配剩余表。
-    :return:
+    输入match_in_col和match_out_col。根据tofill_flag生成
+    1、临时完成表+临时剩余表（tofill_flag=1）
+    2、匹配完成表+匹配剩余表。(tofill_flag=0)
     """
-    process_yet(tofill_flag, union_df, match_out_col, match_in_col, in_col, out_col, union_yet_outdir,union_temp_yet_outdir)
+    process_yet(tofill_flag, union_df, match_out_col, match_in_col, in_col, out_col, union_yet_outdir)
     # 第一次匹配，生成匹配完成表
-    process_not(tofill_flag, union_df, match_out_col, match_in_col, in_col, out_col, union_not_outdir,union_temp_not_outdir)
+    process_not(tofill_flag, union_df, match_out_col, match_in_col, in_col, out_col, union_not_outdir)
     # 第二次匹配，生成匹配剩余表
     return
 
 
-def process_yet(tofill_flag, union_df, match_out_col, match_in_col, in_col, out_col, union_yet_outdir,union_temp_yet_outdir):
+def process_yet(tofill_flag, union_df, match_out_col, match_in_col, in_col, out_col, union_yet_outdir):
     union_yet_df = union_df.copy()
     id = 1
     # 暴力循环
@@ -128,24 +129,18 @@ def process_yet(tofill_flag, union_df, match_out_col, match_in_col, in_col, out_
                     match_out_col.at[idx_out, "vis"] = match_in_col.at[idx_in, "vis"] = 2
 
                 id += 1
-
-    if tofill_flag == 1:
-        union_yet_df.to_excel(union_yet_outdir, index=False)
-        print("月匹配完成表生成完毕")
-    else:
-        union_yet_df.to_excel(union_temp_yet_outdir, index=False)
-        print("月匹配临时完成表生成完毕")
-
+    union_yet_df.to_excel(union_yet_outdir, index=False)
     print("format_excel启动")
     format_excel(union_yet_outdir)
     print("format_excel完成")
+    if tofill_flag == 0:
+        print("月匹配完成表生成完毕")
+    else:
+        print("月匹配临时完成表生成完毕")
 
 
 
-    return union_yet_df
-
-
-def process_not(tofill_flag, union_df, match_out_col, match_in_col, in_col, out_col, union_not_outdir,union_temp_not_outdir):
+def process_not(tofill_flag, union_df, match_out_col, match_in_col, in_col, out_col, union_not_outdir):
     union_not_df = union_df.copy()
     print("月匹配剩余表开始生成")
     # 生成未匹配表
@@ -201,14 +196,12 @@ def process_not(tofill_flag, union_df, match_out_col, match_in_col, in_col, out_
                        "含税单价1": tax_perprice_in, "含税总金额1": tax_money_in, "销方名称": name_in}
             union_not_df = union_not_df.append(not_row, ignore_index=True)
 
-    if tofill_flag == 1:
-        union_not_df.to_excel(union_not_outdir, index=False)
-        print("月匹配剩余表生成完毕")
-    else:
-        union_not_df.to_excel(union_temp_not_outdir, index=False)
-        print("月匹配临时剩余表生成完毕")
-
+    union_not_df.to_excel(union_not_outdir, index=False)
     print("format_excel启动")
     format_excel(union_not_outdir)
     print("format_excel完成")
+    if tofill_flag == 0:
+        print("月匹配剩余表生成完毕")
+    else:
+        print("月匹配临时剩余表生成完毕")
 
