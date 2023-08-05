@@ -1,6 +1,7 @@
- function setOutputPath() {
+//  上传输出文件的父路径
+function setUnionOutdir() {
             var path = document.getElementById("output-filepath").value;
-            fetch('/set_output_path', {
+            fetch('/set_union_outdir', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

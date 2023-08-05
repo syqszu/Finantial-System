@@ -4,13 +4,11 @@ import traceback
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import requests
-
-from script.deal_excel_shan import process_outputFilepath, process_excelFilepath, getOutdir, pre_deal, get_col, \
-    create_union_excel, judgeprocess
+from script.deal_excel import process_union_outdir
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
-
+union_outdir = ""
 
 @app.errorhandler(Exception)
 def handle_exception(e):
@@ -23,42 +21,25 @@ def index():
     # return render_template('indexshan.html')
     return render_template('test.html')
 
-
-
-@app.route('/set_output_path', methods=['POST'])
+# 上传合并文件父路径
+@app.route('/set_union_outdir', methods=['POST'])
 def set_path():
     path = request.json['path']
-    # 处理路径，例如保存到数据库或进行其他操作
-    # ...
+    union_outdir = path
+    process_union_outdir(path)
     return jsonify({'path': path})
 
-@app.route('/getfilepath', methods=['POST'])
-def process_data():
-    data = request.get_json()
-    outputFilepath = data['outputFilepath']
-    process_outputFilepath(outputFilepath)
-    print("outputFilepath", outputFilepath)
-    return 'getfilepath successfully'
-
-# 全局变量，用以记录已收到的文件数量
-filecnt = 0
 file_names = []
 @app.route('/upload', methods=['POST'])
 @app.route('/getfile', methods=['POST'])
 def upload_file():
     file = request.files['file']
     filename = file.filename
-    file_names.append(file.filename)
-    filepath = os.path.dirname(__file__)
-    save_path = os.path.join(os.path.dirname(__file__), 'temp', filename)
+    file_names.append(filename)
+    save_path = os.path.join(union_outdir, filename)
     file.save(save_path)
-    global filecnt
-    filecnt += 1
-    process_excelFilepath(filename, save_path)
-    print("filepath", filepath)
-    print("savepath", save_path)
-    return 'File uploaded successfully'
 
+    return 'File uploaded successfully'
 
 @app.route('/get_file_info', methods=['GET'])
 def get_file_info():
