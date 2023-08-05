@@ -1,12 +1,19 @@
 import os
 
-excel_in_url = r"D:\dev\ExcelUtil\temp\3月份进项.xlsx"
-excel_out_url = r"D:\dev\ExcelUtil\temp\3月份销项.xlsx"
-excel_lastmonth_url = r"D:\dev\ExcelUtil\temp\2月匹配剩余表.xlsx"
-union_outdir = r"D:\dev\ExcelUtil\temp\out"
-process_id = 0
+def set_union_outdir(dir):
+    global union_outdir
+    print("进入process_union_outdir")
+    union_outdir =  dir
+
+def get_union_outdir():
+    return union_outdir
 
 def modify_process(dir):
+    excel_in_url = r"D:\dev\ExcelUtil\temp\3月份进项.xlsx"
+    excel_out_url = r"D:\dev\ExcelUtil\temp\3月份销项.xlsx"
+    excel_lastmonth_url = r"D:\dev\ExcelUtil\temp\2月匹配剩余表.xlsx"
+    process_id = 0
+
     file_list = []
     for root, dirs, files in os.walk(dir):
         for file in files:
@@ -30,4 +37,5 @@ def modify_process(dir):
                 break
             process_id =  3
     print("process_id",process_id)
+
     return excel_in_url, excel_out_url, excel_lastmonth_url, process_id

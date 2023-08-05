@@ -46,5 +46,5 @@ mergeButton.addEventListener('click', () => {
     setTimeout(() => {
         progressBar.classList.remove('active');
         progressText.textContent = "合并成功";
-    }, 10000);
+    }, 20000);
 });

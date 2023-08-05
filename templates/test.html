@@ -25,8 +25,8 @@
                         </div>
                         <div id="instruction-words">
                             <h4>1、上传文件——您可以选择拖拽上传或者选择文件上传文件。</h4>
-                            <h4>2、配置输出——复制您期望的输出文件路径到“输出文件路径”中。</h4>
-                            <h4>3、开始合并——点击“配置”“合并”按钮。程序约五分钟左右完成。</h4>
+                            <h4>2、配置输出——复制输出文件路径到“输出文件路径”中并点击配置，如“D:\dev\temp”。</h4>
+                            <h4>3、开始合并——点击“配置”“合并”按钮。程序约两分钟左右完成。</h4>
 
                             <!-- <div class="instruction-details">1、上传文件——您可以选择拖拽上传或者输入路径上传文件。</div>
                             <div class="instruction-details">2、配置输出——复制您期望的输出文件路径到“输出文件路径”中。</div>
@@ -38,8 +38,7 @@
                             <div class="drag-excel" >
                                 <div class="up-drag-excel">
                                     <div class="drag-center" id="drag-excel1">
-                                        <h3>本月进项文件/</h3>
-                                        <h3>匹配临时完成表</h3>
+                                        <h3>本月进项文件/临时匹配完成表</h3>
                                     </div>
                                 </div>
                                 <div class="down-drag-excel">
@@ -55,8 +54,7 @@
                             <div class="drag-excel" >
                                 <div class="up-drag-excel">
                                     <div class="drag-center" id="drag-excel2">
-                                        <h3>本月销项文件/</h3>
-                                        <h3>匹配临时剩余表</h3>
+                                        <h3>本月销项文件/临时匹配剩余表</h3>
                                     </div>
                                 </div>
                                 <div class="down-drag-excel">
@@ -72,8 +70,7 @@
                             <div class="drag-excel">
                                 <div class="up-drag-excel">
                                     <div class="drag-center"  id="drag-excel3">
-                                        <h3>上月剩余匹配文件/</h3>
-                                        <h3>匹配代填充表</h3>
+                                        <h3>上月剩余匹配文件/匹配待填充表</h3>
                                     </div>
                                 </div>
                                 <div class="down-drag-excel">
@@ -122,7 +119,7 @@
             <div id="output-area">
                 <div id="button-area">
                     <button class="button" id="config-button">配置</button>
-                    <button class="button" id="merge-button">合并</button>
+                    <button class="button" id="merge-button" onclick="callDealExcel()">合并</button>
                 </div>
                 <div id="progress-area">
                     <div id="progress-bar"></div>
@@ -131,11 +128,9 @@
             </div>
         </div>
     </div>
-
-    </div>
-
     <script src="../static/draglistener.js"></script>
     <script src="../static/setUnionOutdir.js"></script>
+    <script src="../static/callDealExcel.js"></script>
 </body>
 
 </html>
