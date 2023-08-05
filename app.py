@@ -1,9 +1,7 @@
 import os
-import subprocess
 import traceback
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
-
 import deal_excel
 from script.modify import set_union_outdir, get_union_outdir
 
@@ -15,10 +13,8 @@ def handle_exception(e):
     print(traceback.format_exc())
     return 'Internal Server Error', 500
 
-
 @app.route('/')
 def index():
-    # return render_template('indexshan.html')
     return render_template('test.html')
 
 # 上传合并文件父路径
@@ -27,7 +23,6 @@ def set_path():
     path = request.json['path']
     set_union_outdir(path)
     return jsonify({'path': path})
-
 
 @app.route('/upload', methods=['POST'])
 @app.route('/getfile', methods=['POST'])
@@ -42,13 +37,6 @@ def upload_file():
 
 @app.route('/run_deal_excel')
 def run_main():
-    # result = subprocess.run(['python', 'deal_excel.py'], capture_output=True, text=True, check=True)
-    # print("result.stdout")
-    # print(result.stdout)
-    # if result.returncode == 0:
-    #     return 'deal_excel.py 已成功执行'
-    # else:
-    #     return 'deal_excel.py 执行失败'
     deal_excel.main()
     return "deal_excel.py成功执行"
 

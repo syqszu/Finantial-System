@@ -37,14 +37,11 @@ dragAreas.forEach(dragArea => {
 mergeButton.addEventListener('click', () => {
     dragAreas.forEach(dragArea => {
         dragArea.classList.remove('success');
-        // let texts = dragArea.querySelectorAll('.up-drag-excel h3');
-        // texts[0].textContent = '本月进项文件/';
-        // texts[1].textContent = '匹配临时完成表';
     });
     progressArea.style.display='flex';
     progressBar.classList.add('active');
     setTimeout(() => {
         progressBar.classList.remove('active');
         progressText.textContent = "合并成功";
-    }, 20000);
+    }, 180000);
 });

@@ -7,7 +7,6 @@ import pandas as pd
 from script.get_format_col import get_format_col
 from script.get_format_df import get_format_df
 from script.get_name_and_filepath import get_name_and_filepath
-from script.judge_process_id import judge_process_id
 from script.merge_col import merge_col
 from script.modify import modify_process, get_union_outdir
 from script.pre_deal import pre_deal
