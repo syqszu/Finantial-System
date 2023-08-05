@@ -24,6 +24,7 @@ def index():
     return render_template('test.html')
 
 
+
 @app.route('/set_output_path', methods=['POST'])
 def set_path():
     path = request.json['path']
