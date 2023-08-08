@@ -1,36 +1,13 @@
 import pandas as pd
 import os
+import execjs
 
 # 将表格的数据提取成match_in_col和match_out_col的形式
 
 def get_format_col(url):
-    if "待填充表" in url:
-        print("开始处理月待填充表")
-        # 将待填充表的数据提取成filled_in_col和filled_out_col
-        df = pd.read_excel(url)
 
-        if os.path.exists(url):
-            os.remove(url)
-            print("待填充表删除成功")
-        else:
-            print("待填充表不存在")
+    if ("月匹配剩余表" in url) or ("月匹配完成表" in url):
 
-        filled_in_col = pd.DataFrame()
-        filled_out_col = pd.DataFrame()
-        for index, row in df.iterrows():
-            if row['from'] == 'in':
-                filled_in_col = filled_in_col.append(row)
-                filled_in_col = filled_in_col.drop("购方名称", axis=1)
-                filled_in_col = filled_in_col.drop("备注", axis=1)
-            elif row['from'] == 'out':
-                filled_out_col = filled_out_col.append(row)
-                filled_out_col = filled_out_col.drop("销方名称", axis=1)
-        filled_out_col = filled_out_col.drop("from", axis=1)
-        filled_in_col = filled_in_col.drop("from", axis=1)
-
-        return filled_out_col, filled_in_col
-
-    if ("月匹配剩余表" in url) or ("月匹配完成表" in url) or ("月临时匹配完成表" in url) or ("月临时匹配剩余表" in url):
         # 将数据提取成filled_in_col和filled_out_col
         df = pd.read_excel(url, skiprows=1)
         # print("df.columns")
@@ -44,11 +21,21 @@ def get_format_col(url):
 
         lastmonth_in_col = pd.DataFrame(columns=df.columns[18:36])
         lastmonth_out_col = pd.DataFrame(columns=df.columns[0:18])
-        for index, row in df.iterrows():
-            if pd.isna(row[0]):
-                lastmonth_in_col = lastmonth_in_col.append(row[18:36])
-            else:
-                lastmonth_out_col = lastmonth_out_col.append(row[0:18])
+
+        if ("月临时匹配完成表" in url):
+            for index, row in df.iterrows():
+                if index>=1:
+                    lastmonth_in_col = lastmonth_in_col.append(row[18:36])
+                    lastmonth_out_col = lastmonth_out_col.append(row[0:18])
+
+        else:
+            for index, row in df.iterrows():
+                if pd.isna(row[0]):
+                    lastmonth_in_col = lastmonth_in_col.append(row[18:36])
+                else:
+                    lastmonth_out_col = lastmonth_out_col.append(row[0:18])
+
+
         # print("改名前")
         # print("out.columns")
         # print(lastmonth_out_col.columns)
@@ -75,8 +62,6 @@ def get_format_col(url):
         # print("in.columns")
         # print(lastmonth_in_col.columns)
 
-        # lastmonth_out_col.to_excel("lastmonth_out_col.xlsx", index=False)
-        # lastmonth_in_col.to_excel("lastmonth_in_col.xlsx", index=False)
         return lastmonth_out_col, lastmonth_in_col
 
     if "进项.xlsx" in url:
@@ -85,7 +70,18 @@ def get_format_col(url):
         print("开始处理进项表格")
         # 从第二行开始读取，且跳过最后一行，因为是“总计”
         df_in = pd.read_excel(url, "Sheet1", header=1, skipfooter=1)
-        print(df_in.tail(1))
+        # print(df_in.tail(1))
+
+
+        # 从文件中读取 JavaScript 代码
+        with open('../static/if_tofill.js', 'r') as f:
+            js_code = f.read()
+        # 编译并加载 JavaScript 代码
+        ctx = execjs.compile(js_code)
+        # 调用 JavaScript 中的函数
+        result = ctx.call('if_tofill')
+
+
 
         if os.path.exists(url):
             os.remove(url)
@@ -102,14 +98,13 @@ def get_format_col(url):
         print("开始处理销项表格")
         # 从第三行开始读取，且跳过最后一行，因为是“总计”
         df_out = pd.read_excel(url, "Sheet1", header=2, skipfooter=1)
-        print(df_out.tail(1))
+        # print(df_out.tail(1))
 
+        match_out_col = df_out[out_col]
 
         if os.path.exists(url):
             os.remove(url)
             print("销项表删除成功")
         else:
             print("销项表不存在")
-
-        match_out_col = df_out[out_col]
         return match_out_col

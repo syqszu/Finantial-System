@@ -21,6 +21,7 @@ def process_yet(tofill_flag, union_df, match_out_col, match_in_col, in_col, out_
     id = 1
     # 暴力循环
     print("月匹配完成表开始生成")
+
     for idx_out, row_out in match_out_col.iterrows():
         for idx_in, row_in in match_in_col.iterrows():
 
@@ -68,8 +69,9 @@ def process_yet(tofill_flag, union_df, match_out_col, match_in_col, in_col, out_
             difference = abs(tax_perprice_in - tax_perprice_out)
             percentage_differ = (difference / tax_perprice_in) * 100
 
-            case1 = (shuishou_out == shuishou_in) and (row_out["vis"] == 0) and (row_in["vis"] == 0)
-
+            case1 = (shuishou_in == shuishou_out) and (row_out["vis"] == 0) and (row_in["vis"] == 0)
+            # print("case1")
+            # print(case1)
             shuishou_front7_in = row_in[0][0:6]
             shuishou_front7_out = row_out[0][0:6]
 
@@ -78,7 +80,7 @@ def process_yet(tofill_flag, union_df, match_out_col, match_in_col, in_col, out_
 
             # 第一次遍历，将税收分类编码完美匹配的vis打上1的标记   前七位相同，含税单价相差不超过10%的vis打上2的标记
             if case1 or case2:
-
+                # print("进入case1 or case 2")
                 yet_row = {"开票日期": date_out, "序号": id, "发票号码": number_out,
                            "税收分类编码": shuishou_out, "货物、应税劳务及服务": loads_out, "规格型号": size_out,
                            "单位": unit_out, "上月原数量": origin_nums_out}
@@ -94,6 +96,7 @@ def process_yet(tofill_flag, union_df, match_out_col, match_in_col, in_col, out_
                     for col in out_col:
                         temp_row.update({col: row_out[col]})
                     temp_row.update({"数量": remain_nums_out})
+                    # print(temp_row)
                     match_out_col.loc[len(match_out_col)] = temp_row
 
                 else:  # 进项上月原数量>销项上月原数量
@@ -104,6 +107,7 @@ def process_yet(tofill_flag, union_df, match_out_col, match_in_col, in_col, out_
                     for col in in_col:
                         temp_row.update({col: row_in[col]})
                     temp_row.update({"数量": remain_nums_in})
+                    # print(temp_row)
                     match_in_col.loc[len(match_in_col)] = temp_row
 
                 yet_row.update(
@@ -129,15 +133,27 @@ def process_yet(tofill_flag, union_df, match_out_col, match_in_col, in_col, out_
                     match_out_col.at[idx_out, "vis"] = match_in_col.at[idx_in, "vis"] = 2
 
                 id += 1
-    union_yet_df.to_excel(union_yet_outdir, index=False)
-    print("format_excel启动")
-    format_excel(union_yet_outdir)
-    print("format_excel完成")
+
     if tofill_flag == 0:
+
+        union_yet_df["人工备注"] = ""
+        union_yet_df["日期错位警告"] = ""
+        union_yet_df["利润警告(10%利润警告/亏本警告)"] = ""
+        union_yet_df.loc[union_yet_df['开票日期'] < union_yet_df['开票日期1'], '日期错位警告'] = '警告'
+        union_yet_df.loc[union_yet_df['含税单价'] < union_yet_df['含税单价1'], '利润警告(10%利润警告/亏本警告)'] = '亏本警告'
+        union_yet_df.loc[((union_yet_df["含税单价"] - union_yet_df["含税单价1"]) / union_yet_df["含税单价1"] * 100) >= 10,
+        "利润警告(10%利润警告/亏本警告)"] = "10%利润警告"
+
+        union_yet_df.to_excel(union_yet_outdir, index=False)
         print("月匹配完成表生成完毕")
     else:
+        # print("union_yet_df", union_yet_df)
+        union_yet_df.to_excel(union_yet_outdir, index=False)
         print("月匹配临时完成表生成完毕")
 
+    print("format_excel启动")
+    format_excel(tofill_flag, union_yet_outdir)
+    print("format_excel完成")
 
 
 def process_not(tofill_flag, union_df, match_out_col, match_in_col, in_col, out_col, union_not_outdir):
@@ -198,7 +214,7 @@ def process_not(tofill_flag, union_df, match_out_col, match_in_col, in_col, out_
 
     union_not_df.to_excel(union_not_outdir, index=False)
     print("format_excel启动")
-    format_excel(union_not_outdir)
+    format_excel(1, union_not_outdir)
     print("format_excel完成")
     if tofill_flag == 0:
         print("月匹配剩余表生成完毕")

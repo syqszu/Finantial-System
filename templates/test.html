@@ -24,13 +24,10 @@
                             <a id="instruction">使用说明</a>
                         </div>
                         <div id="instruction-words">
-                            <h4>1、上传文件——您可以选择拖拽上传或者选择文件上传文件。</h4>
-                            <h4>2、配置输出——复制输出文件路径到“输出文件路径”中并点击设置，如“D:\dev\temp”。</h4>
+                            <h4>1、配置输出——复制输出文件夹路径并点击设置，如“D:\dev”。注意输出文件夹需要是空的！</h4>
+                            <h4>2、上传文件——您可以选择“拖拽上传”或者“选择文件”上传文件。</h4>
                             <h4>3、开始合并——依次点击“配置”“合并”按钮。程序约三分钟左右完成。</h4>
 
-                            <!-- <div class="instruction-details">1、上传文件——您可以选择拖拽上传或者输入路径上传文件。</div>
-                            <div class="instruction-details">2、配置输出——复制您期望的输出文件路径到“输出文件路径”中。</div>
-                            <div class="instruction-details">3、配置合并——点击“配置”“合并”按钮。程序约五分钟左右完成。</div> -->
                         </div>
                     </div>
                     <div id="drag-area">
@@ -106,6 +103,15 @@
                     <div class="right-input-child">
                         <div class="right-up-input">
                             <img class="right-logo" src="../static/img/right-logo.png" alt="right-logo">
+                            <a class="right-up-input-words">上月剩余匹配表路径</a>
+                        </div>
+                        <div class="right-down-input">
+                            <input type="file" id="lastmonth-filepath">
+                        </div>
+                    </div>
+                    <div class="right-input-child">
+                        <div class="right-up-input">
+                            <img class="right-logo" src="../static/img/right-logo.png" alt="right-logo">
                             <a class="right-up-input-words">输出文件路径</a>
                         </div>
                         <div class="right-down-input">
@@ -119,7 +125,7 @@
             <div id="output-area">
                 <div id="button-area">
                     <button class="button" id="config-button">配置</button>
-                    <button class="button" id="merge-button" onclick="callDealExcel()">合并</button>
+                    <button class="button" id="merge-button">合并</button>
                 </div>
                 <div id="progress-area">
                     <div id="progress-bar"></div>
@@ -130,7 +136,6 @@
     </div>
     <script src="../static/draglistener.js"></script>
     <script src="../static/setUnionOutdir.js"></script>
-    <script src="../static/callDealExcel.js"></script>
 </body>
 
 </html>

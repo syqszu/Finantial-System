@@ -45,3 +45,11 @@ mergeButton.addEventListener('click', () => {
         progressText.textContent = "合并成功";
     }, 180000);
 });
+
+mergeButton.addEventListener('click', () => {
+    fetch('/merge', { method: 'POST' })
+        .then(response => response.text())
+        .then(data => {
+            console.log(data);
+        });
+});

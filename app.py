@@ -24,6 +24,7 @@ def set_path():
     set_union_outdir(path)
     return jsonify({'path': path})
 
+# 上传文件，将其保存在合并文件父路径中
 @app.route('/upload', methods=['POST'])
 @app.route('/getfile', methods=['POST'])
 def upload_file():
@@ -31,14 +32,17 @@ def upload_file():
     filename = file.filename
     union_outdir = get_union_outdir()
     save_path = os.path.join(union_outdir, filename)
-    print("save_path",save_path)
+    print("save_path", save_path)
     file.save(save_path)
     return 'File uploaded successfully'
 
-@app.route('/run_deal_excel')
-def run_main():
+
+@app.route('/merge', methods=['POST'])
+def merge():
+    print("请求进入deal_excel")
     deal_excel.main()
     return "deal_excel.py成功执行"
+
 
 if __name__ == '__main__':
     app.run()

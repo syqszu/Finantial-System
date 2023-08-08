@@ -4,7 +4,7 @@ global union_not_outdir, union_yet_outdir, union_tofill_outdir, union_temp_not_o
 
 def get_name_and_filepath(excel_in_url, union_outdir):
     """
-    通过进项文件的绝对路径和进项文件的绝对父路径，生成临时完成表、临时剩余表、待填充表、匹配完成表、匹配剩余表的绝对路径。
+    通过进项文件的绝对路径和进项文件的绝对父路径，生成匹配完成表、匹配剩余表的绝对路径。
     excel_in_url:进项文件的绝对路径
     union_outdir:进项文件的绝对父路径
     :return:临时完成表、临时剩余表、待填充表、匹配完成表、匹配剩余表的绝对路径。
